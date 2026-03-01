@@ -20,6 +20,9 @@ export type AnnounceTarget = {
 export function resolveAnnounceTargetFromKey(sessionKey: string): AnnounceTarget | null {
   const rawParts = sessionKey.split(":").filter(Boolean);
   const parts = rawParts.length >= 3 && rawParts[0] === "agent" ? rawParts.slice(2) : rawParts;
+  // Extract agent ID from keys like "agent:<agentId>:telegram:group:..." so
+  // announce delivery uses the correct bot account instead of the default.
+  const agentAccountId = rawParts.length >= 3 && rawParts[0] === "agent" ? rawParts[1] : undefined;
   if (parts.length < 3) {
     return null;
   }
@@ -58,6 +61,11 @@ export function resolveAnnounceTargetFromKey(sessionKey: string): AnnounceTarget
     if (normalizedChannel === "discord" || normalizedChannel === "slack") {
       return `channel:${id}`;
     }
+    // Telegram expects raw numeric chat IDs; the `group:` prefix is only
+    // recognised by stripTelegramInternalPrefixes when preceded by `telegram:`.
+    if (normalizedChannel === "telegram") {
+      return id;
+    }
     return kind === "channel" ? `channel:${id}` : `group:${id}`;
   })();
   const normalized = normalizedChannel
@@ -66,6 +74,7 @@ export function resolveAnnounceTargetFromKey(sessionKey: string): AnnounceTarget
   return {
     channel,
     to: normalized ?? kindTarget,
+    accountId: agentAccountId,
     threadId,
   };
 }

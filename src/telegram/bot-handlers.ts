@@ -1321,6 +1321,11 @@ export const registerTelegramHandlers = ({
       if (shouldSkipUpdate(event.ctxForDedupe)) {
         return;
       }
+      // Skip messages from other bots in groups (prevents cascade when e.g. Speaker
+      // processes MP bot speeches posted via announce flow)
+      if (event.isGroup && event.msg.from?.is_bot) {
+        return;
+      }
       const eventAuthContext = await resolveTelegramEventAuthorizationContext({
         chatId: event.chatId,
         isForum: event.isForum,
