@@ -66,4 +66,5 @@ USER node
 # Start gateway server.
 # Uses PORT env var (default 10000 for Render) and binds LAN for container platforms.
 # OPENCLAW_GATEWAY_TOKEN env var required for LAN bind (set in Render env vars).
-CMD ["sh", "-c", "node openclaw.mjs gateway --allow-unconfigured --bind lan --port ${PORT:-10000}"]
+# Writes a minimal config for LAN-bound Control UI origin policy before starting.
+CMD ["sh", "-c", "mkdir -p $HOME/.openclaw && echo '{\"gateway\":{\"controlUi\":{\"dangerouslyAllowHostHeaderOriginFallback\":true}}}' > $HOME/.openclaw/openclaw.json && node openclaw.mjs gateway --allow-unconfigured --bind lan --port ${PORT:-10000}"]
