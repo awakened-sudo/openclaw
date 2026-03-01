@@ -1,0 +1,43 @@
+# Parliament Twin - Docker Compose Override
+# Place this alongside docker-compose.yml on the VPS at /opt/parliament-twin/openclaw/
+#
+# Usage:
+#   docker compose build
+#   docker compose up -d
+#   docker compose logs -f
+
+services:
+  openclaw-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      NODE_ENV: production
+      NODE_OPTIONS: "--max-old-space-size=3072"
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY}
+    volumes:
+      - ${OPENCLAW_CONFIG_DIR:-/opt/parliament-twin/openclaw-state}:/home/node/.openclaw
+      - ${OPENCLAW_WORKSPACE_DIR:-/opt/parliament-twin/workspaces}:/data/workspace
+    ports:
+      - "127.0.0.1:${OPENCLAW_GATEWAY_PORT:-18789}:18789"
+    init: true
+    restart: unless-stopped
+    command:
+      [
+        "node",
+        "openclaw.mjs",
+        "gateway",
+        "--bind",
+        "lan",
+        "--port",
+        "18789",
+      ]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"

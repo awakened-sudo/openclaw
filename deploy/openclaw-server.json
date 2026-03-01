@@ -1,0 +1,447 @@
+{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openai/gpt-5-nano-2025-08-07",
+        "fallbacks": ["google/gemini-3-flash-preview", "minimax-portal/MiniMax-M2.5"]
+      },
+      "models": {
+        "minimax-portal/MiniMax-M2.5": {
+          "alias": "minimax"
+        },
+        "minimax-portal/MiniMax-M2.1": {
+          "alias": "minimax-fast"
+        },
+        "anthropic/claude-sonnet-4-6": {
+          "alias": "sonnet"
+        },
+        "google/gemini-3-flash-preview": {
+          "alias": "gemini-flash"
+        },
+        "openai/gpt-5-nano-2025-08-07": {
+          "alias": "gpt-nano"
+        }
+      },
+      "thinkingDefault": "off",
+      "heartbeat": {
+        "every": "30m",
+        "activeHours": {
+          "start": "08:00",
+          "end": "23:00",
+          "timezone": "Asia/Kuala_Lumpur"
+        },
+        "target": "telegram",
+        "to": "142213678",
+        "model": "openai/gpt-5-nano-2025-08-07",
+        "suppressToolErrorWarnings": true
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 7,
+      "subagents": {
+        "maxConcurrent": 8
+      },
+      "workspace": "/data/workspace"
+    },
+    "list": [
+      {
+        "id": "speaker",
+        "workspace": "/data/workspace/workspaces/speaker",
+        "heartbeat": {
+          "every": "15m",
+          "accountId": "speaker"
+        },
+        "identity": {
+          "name": "Speaker of the Dewan Rakyat",
+          "theme": "Parliamentary Authority",
+          "emoji": "\u2696\ufe0f"
+        }
+      },
+      {
+        "id": "pm",
+        "default": true,
+        "workspace": "/data/workspace/workspaces/pm-anwar",
+        "identity": {
+          "name": "PM Anwar Ibrahim",
+          "theme": "Prime Minister",
+          "emoji": "\ud83c\udfdb\ufe0f"
+        },
+        "heartbeat": {
+          "every": "45m",
+          "accountId": "pm"
+        }
+      },
+      {
+        "id": "mp-p022",
+        "workspace": "/data/workspace/workspaces/mp-p022-gua-musang",
+        "identity": {
+          "name": "Tengku Razaleigh (Gua Musang)",
+          "theme": "UMNO Elder Statesman",
+          "emoji": "\ud83d\udc18"
+        },
+        "heartbeat": {
+          "every": "55m",
+          "accountId": "mp-p022"
+        }
+      },
+      {
+        "id": "mp-p019",
+        "workspace": "/data/workspace/workspaces/mp-p019-kota-bharu",
+        "identity": {
+          "name": "Takiyuddin Hassan (Kota Bharu)",
+          "theme": "PAS Opposition",
+          "emoji": "\ud83c\udf19"
+        },
+        "heartbeat": {
+          "every": "50m",
+          "accountId": "mp-p019"
+        }
+      },
+      {
+        "id": "mp-p160",
+        "workspace": "/data/workspace/workspaces/mp-p160-iskandar-puteri",
+        "identity": {
+          "name": "Noryakin Chow (Iskandar Puteri)",
+          "theme": "BN Coalition",
+          "emoji": "\ud83c\udfd7\ufe0f"
+        },
+        "heartbeat": {
+          "every": "47m",
+          "accountId": "mp-p160"
+        }
+      },
+      {
+        "id": "mp-p197",
+        "workspace": "/data/workspace/workspaces/mp-p197-kuching",
+        "identity": {
+          "name": "Dr. Kelvin Yii (Kuching)",
+          "theme": "GPS Sarawak",
+          "emoji": "\ud83e\udd8f"
+        },
+        "heartbeat": {
+          "every": "52m",
+          "accountId": "mp-p197"
+        }
+      },
+      {
+        "id": "mp-p074",
+        "workspace": "/data/workspace/workspaces/mp-p074-tambun",
+        "identity": {
+          "name": "Anwar Ibrahim (Tambun)",
+          "theme": "PKR Reformist",
+          "emoji": "\ud83c\udf3a"
+        },
+        "heartbeat": {
+          "every": "43m",
+          "accountId": "mp-p074"
+        }
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "agentId": "speaker",
+      "match": {
+        "channel": "telegram",
+        "accountId": "speaker"
+      }
+    },
+    {
+      "agentId": "pm",
+      "match": {
+        "channel": "telegram",
+        "accountId": "pm"
+      }
+    },
+    {
+      "agentId": "mp-p022",
+      "match": {
+        "channel": "telegram",
+        "accountId": "mp-p022"
+      }
+    },
+    {
+      "agentId": "mp-p019",
+      "match": {
+        "channel": "telegram",
+        "accountId": "mp-p019"
+      }
+    },
+    {
+      "agentId": "mp-p160",
+      "match": {
+        "channel": "telegram",
+        "accountId": "mp-p160"
+      }
+    },
+    {
+      "agentId": "mp-p197",
+      "match": {
+        "channel": "telegram",
+        "accountId": "mp-p197"
+      }
+    },
+    {
+      "agentId": "mp-p074",
+      "match": {
+        "channel": "telegram",
+        "accountId": "mp-p074"
+      }
+    }
+  ],
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "allowlist",
+      "allowFrom": ["142213678", "1797956910"],
+      "groups": {
+        "*": {
+          "requireMention": true
+        },
+        "-5196441657": {
+          "requireMention": false
+        }
+      },
+      "groupAllowFrom": ["142213678", "1797956910"],
+      "groupPolicy": "allowlist",
+      "streaming": "off",
+      "accounts": {
+        "speaker": {
+          "name": "Speaker of Dewan Rakyat",
+          "botToken": "REPLACE_SPEAKER_BOT_TOKEN",
+          "customCommands": [
+            {
+              "command": "buka_sidang",
+              "description": "Buka sidang Dewan (Open session)"
+            },
+            {
+              "command": "tutup_sidang",
+              "description": "Tutup sidang Dewan (Close session)"
+            },
+            {
+              "command": "bahas",
+              "description": "Mulakan perbahasan (Start debate) \u2014 /bahas [topik]"
+            },
+            {
+              "command": "undi",
+              "description": "Pembahagian/Undi (Call for vote)"
+            },
+            {
+              "command": "usul",
+              "description": "Kemukakan usul (Propose motion) \u2014 /usul [teks]"
+            },
+            {
+              "command": "pertanyaan",
+              "description": "Soalan parlimen (Question) \u2014 /pertanyaan [soalan]"
+            },
+            {
+              "command": "perintah_hari_ini",
+              "description": "Aturan Mesyuarat hari ini (Today's Order Paper)"
+            },
+            {
+              "command": "senarai_ahli",
+              "description": "Senarai Ahli Parlimen (List MPs)"
+            }
+          ]
+        },
+        "pm": {
+          "name": "PM Anwar Ibrahim",
+          "botToken": "REPLACE_PM_BOT_TOKEN"
+        },
+        "mp-p022": {
+          "name": "MP Gua Musang (P.022)",
+          "botToken": "REPLACE_MP_P022_BOT_TOKEN"
+        },
+        "mp-p019": {
+          "name": "MP Kota Bharu (P.019)",
+          "botToken": "REPLACE_MP_P019_BOT_TOKEN"
+        },
+        "mp-p160": {
+          "name": "MP Iskandar Puteri (P.160)",
+          "botToken": "REPLACE_MP_P160_BOT_TOKEN"
+        },
+        "mp-p197": {
+          "name": "MP Kuching (P.197)",
+          "botToken": "REPLACE_MP_P197_BOT_TOKEN"
+        },
+        "mp-p074": {
+          "name": "MP Tambun (P.074)",
+          "botToken": "REPLACE_MP_P074_BOT_TOKEN"
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "lan",
+    "controlUi": {
+      "enabled": true,
+      "dangerouslyAllowHostHeaderOriginFallback": true
+    },
+    "auth": {
+      "mode": "token"
+    },
+    "reload": {
+      "mode": "hybrid",
+      "debounceMs": 300
+    },
+    "tailscale": {
+      "mode": "off"
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "calendar.add",
+        "contacts.add",
+        "reminders.add"
+      ]
+    }
+  },
+  "plugins": {
+    "entries": {
+      "telegram": {
+        "enabled": true
+      },
+      "minimax-portal-auth": {
+        "enabled": true
+      }
+    }
+  },
+  "messages": {
+    "suppressToolErrors": true,
+    "ackReactionScope": "group-mentions"
+  },
+  "tools": {
+    "agentToAgent": {
+      "enabled": true,
+      "allow": ["speaker", "pm", "mp-p019", "mp-p022", "mp-p074", "mp-p160", "mp-p197"]
+    },
+    "sessions": {
+      "visibility": "all"
+    }
+  },
+  "memory": {
+    "backend": "builtin",
+    "citations": "auto"
+  },
+  "cron": {
+    "enabled": true,
+    "maxConcurrentRuns": 2,
+    "sessionRetention": "48h"
+  },
+  "hooks": {
+    "internal": {
+      "entries": {
+        "boot-md": {
+          "enabled": true
+        },
+        "session-memory": {
+          "enabled": true
+        },
+        "command-logger": {
+          "enabled": true
+        }
+      },
+      "enabled": true
+    }
+  },
+  "models": {
+    "providers": {
+      "minimax-portal": {
+        "baseUrl": "https://api.minimax.io/anthropic",
+        "apiKey": "minimax-oauth",
+        "api": "anthropic-messages",
+        "models": [
+          {
+            "id": "MiniMax-M2.5",
+            "name": "MiniMax M2.5",
+            "reasoning": true,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "MiniMax-M2.1",
+            "name": "MiniMax M2.1",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      },
+      "google": {
+        "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
+        "apiKey": "${GOOGLE_AI_API_KEY}",
+        "api": "google-generative-ai",
+        "models": [
+          {
+            "id": "gemini-3-flash-preview",
+            "name": "Gemini 3 Flash",
+            "reasoning": false,
+            "input": ["text", "image"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 1048576,
+            "maxTokens": 65536
+          }
+        ]
+      },
+      "openai": {
+        "baseUrl": "https://api.openai.com/v1",
+        "apiKey": "${OPENAI_API_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "gpt-5-nano-2025-08-07",
+            "name": "GPT-5 Nano",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": { "input": 5e-5, "output": 0.0002, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 128000,
+            "maxTokens": 16384
+          }
+        ]
+      }
+    },
+    "mode": "merge"
+  },
+  "auth": {
+    "profiles": {
+      "minimax-portal:default": {
+        "provider": "minimax-portal",
+        "mode": "oauth"
+      }
+    }
+  },
+  "skills": {
+    "entries": {
+      "nano-banana-pro": {
+        "apiKey": "${GOOGLE_AI_API_KEY}"
+      },
+      "openai-image-gen": {
+        "apiKey": "${OPENAI_API_KEY}"
+      },
+      "openai-whisper-api": {
+        "apiKey": "${OPENAI_API_KEY}"
+      }
+    }
+  },
+  "session": {
+    "dmScope": "per-channel-peer",
+    "agentToAgent": {
+      "maxPingPongTurns": 0
+    }
+  }
+}
